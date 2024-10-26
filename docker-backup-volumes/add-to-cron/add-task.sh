@@ -10,6 +10,9 @@ fi
 
 source "$CONFIG_FILE"
 
+BACKUP_CMD="ansible-playbook $BACKUP_PLAYBOOK -e $BACKUP_CONFIG"
+JOB="$JOB_SCHEDULE $JOB_USER $BACKUP_CMD >> $LOG_FILE 2>&1"
+
 if [ ! -f "$BACKUP_PLAYBOOK" ]; then
     echo "Backup playbook not found" >&2
     exit 1

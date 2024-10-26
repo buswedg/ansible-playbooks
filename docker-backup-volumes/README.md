@@ -1,6 +1,6 @@
 # docker-backup-volumes
 
-Ansible playbook which created backups of docker volumes on host.
+Ansible playbook which creates backups of docker volumes on host.
 
 ## Usage
 

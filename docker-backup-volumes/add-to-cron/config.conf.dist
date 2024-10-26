@@ -1,0 +1,6 @@
+LOG_FILE="/path/to/cron.log"
+CRON_FILE="/path/to/cron"
+BACKUP_PLAYBOOK="/path/to/backup-volumes.yml"
+BACKUP_CONFIG="/path/to/config.yml"
+BACKUP_CMD="ansible-playbook $BACKUP_PLAYBOOK -e $BACKUP_CONFIG"
+JOB="0 2 * * * root $BACKUP_CMD >> $LOG_FILE 2>&1"

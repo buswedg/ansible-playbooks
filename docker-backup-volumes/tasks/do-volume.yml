@@ -1,0 +1,23 @@
+---
+- name: Retrieve information about volume ({{ volume }})
+  docker_volume_info:
+    name: "{{ volume }}"
+  register: volume_info
+
+- name: Create tasks of volume ({{ volume }})
+  shell: >
+    docker run --rm --platform {{ host_platform }} \
+      -v "{{ volume }}:/data" \
+      -v "{{ backup_location }}:/backup" \
+      -v "{{ gpg_pass }}:/run/secrets/gpg_pass:ro" \
+      {{ backup_image }} \
+      sh -c "tar czf - /data | gpg --batch --yes --passphrase-file /run/secrets/gpg_pass -c -o /backup/{{ volume }}-$(date +%Y-%m-%d-%H-%M).tar.gz.gpg"
+  when: volume_info.exists
+
+- name: Prune old backups of volume ({{ volume }})
+  shell: |
+    find {{ backup_location }} -maxdepth 1 -name '{{ volume }}-*' -type f | 
+    sort | 
+    head -n -{{ backups_kept }} | 
+    xargs -r rm --
+  when: volume_info.exists

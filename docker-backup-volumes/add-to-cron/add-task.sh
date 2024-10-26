@@ -1,6 +1,8 @@
 #!/bin/bash
 
-CONFIG_FILE="./config.conf"
+SCRIPT_DIR="$(dirname "$(realpath "$0")")"
+CONFIG_FILE="$SCRIPT_DIR/config.conf"
+
 if [ ! -f "$CONFIG_FILE" ]; then
     echo "Configuration file not found: $CONFIG_FILE" >&2
     exit 1

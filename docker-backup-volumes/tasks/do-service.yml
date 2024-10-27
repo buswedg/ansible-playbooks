@@ -21,7 +21,7 @@
     loop_var: volume
 
 - name: Start containers for service ({{ service }}) if stopped
-  command: "docker compose -f {{ compose }} up -d"
+  command: "docker compose -p {{ service }} -f {{ compose }} up -d"
   when: stop_containers | bool
   register: start_containers_result
   changed_when: start_containers_result.rc == 0

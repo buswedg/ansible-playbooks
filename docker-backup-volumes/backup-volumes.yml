@@ -4,7 +4,7 @@
   vars:
     config_file: "{{ playbook_dir }}/config.yml"
 
-  # Override config from command line with `ansible-playbook backup-volumes.yml -e "/path/to/config.yml"`
+  # Override config from command line with `ansible-playbook backup-volumes.yml -e @/path/to/config.yml`
   vars_files:
     - "{{ config_file }}"
 

@@ -1,4 +1,4 @@
 config.conf
 config.yml
-gpg.pass
-gpg.pass.vault
+.gpg-pass
+.gpg-pass.vault

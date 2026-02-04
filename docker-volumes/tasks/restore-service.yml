@@ -1,0 +1,27 @@
+---
+- name: Stop containers for service ({{ service }}) if required
+  command: "docker compose -f {{ compose }} down"
+  when: stop_containers | bool
+  register: stop_containers_result
+  changed_when: stop_containers_result.rc == 0
+
+- name: Ensure tasks directory for service ({{ service }}) exists
+  file:
+    path: "{{ backup_location }}"
+    state: directory
+    mode: '0770'
+    owner: 1000
+    group: 1000
+  become: true
+
+- name: Restore volumes for service ({{ service }})
+  include_tasks: "restore-volume.yml"
+  loop: "{{ volumes }}"
+  loop_control:
+    loop_var: volume
+
+- name: Start containers for service ({{ service }}) if stopped
+  command: "docker compose -p {{ service }} -f {{ compose }} up -d"
+  when: stop_containers | bool
+  register: start_containers_result
+  changed_when: start_containers_result.rc == 0

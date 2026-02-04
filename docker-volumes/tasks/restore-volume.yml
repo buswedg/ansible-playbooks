@@ -1,0 +1,31 @@
+---
+- name: Find backup file for volume ({{ volume }})
+  find:
+    paths: "{{ backup_location }}"
+    patterns: "{{ volume }}-{{ restore_date }}*.tar.gz.gpg"
+  register: backup_files
+
+- name: Fail if no backup found
+  fail:
+    msg: "No backup found for {{ volume }} in {{ backup_location }} matching pattern {{ volume }}-{{ restore_date }}*.tar.gz.gpg"
+  when: backup_files.matched == 0
+
+- name: Set backup file path
+  set_fact:
+    # Sorts by path (filename) which contains YYYY-MM-DD-HH-MM, ensuring correct chronological order
+    # regardless of file modification time.
+    backup_file: "backup/{{ backup_files.files | sort(attribute='path') | last | basename }}"
+
+- name: Display backup being restored
+  debug:
+    msg: "Restoring {{ volume }} from {{ backup_file }}"
+
+- name: Restore volume ({{ volume }})
+  shell: >
+    docker run --rm --platform {{ host_platform }} \
+      -v "{{ volume }}:/data" \
+      -v "{{ backup_location }}:/backup" \
+      -v "{{ gpg_pass }}:/run/secrets/gpg_pass:ro" \
+      {{ backup_image }} \
+      sh -c "gpg --batch --yes --passphrase-file /run/secrets/gpg_pass --decrypt /{{ backup_file }} | tar xzf - -C /data"
+  when: backup_files.matched > 0

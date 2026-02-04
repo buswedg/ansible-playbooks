@@ -1,0 +1,6 @@
+LOG_FILE="/path/to/cron.log"
+CRON_FILE="/path/to/cron"
+BACKUP_PLAYBOOK="/path/to/backup-volumes.yml"
+BACKUP_CONFIG="/path/to/config.yml"
+JOB_SCHEDULE="0 2 * * *"
+JOB_USER="root"

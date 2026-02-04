@@ -1,0 +1,21 @@
+---
+- name: Backup Docker volumes
+  hosts: localhost
+  vars:
+    config_file: "{{ playbook_dir }}/config.yml"
+
+  # Override config from command line with `ansible-playbook backup-volumes.yml -e @/path/to/config.yml`
+  vars_files:
+    - "{{ config_file }}"
+
+  tasks:
+    - name: Backup volumes for desired services
+      include_tasks: "{{ service_task }}"
+      loop: "{{ services | dict2items }}"
+      vars:
+        service: "{{ item.key }}"
+        compose: "{{ item.value.compose }}"
+        stop_containers: "{{ item.value.stop_containers }}"
+        backups_kept: "{{ item.value.backups_kept }}"
+        volumes: "{{ item.value.volumes | default([]) }}"
+        backup_location: "{{ backup_root }}/{{ item.key }}"

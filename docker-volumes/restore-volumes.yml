@@ -1,0 +1,21 @@
+---
+- name: Restore Docker volumes
+  hosts: localhost
+  vars:
+    config_file: "{{ playbook_dir }}/config.yml"
+    restore_date: "" # Optional: specify date string to match backup filename (e.g., 2023-10-27-10-00)
+
+  # Override config from command line with `ansible-playbook restore-volumes.yml -e @/path/to/config.yml`
+  vars_files:
+    - "{{ config_file }}"
+
+  tasks:
+    - name: Restore volumes for desired services
+      include_tasks: "tasks/restore-service.yml"
+      loop: "{{ services | dict2items }}"
+      vars:
+        service: "{{ item.key }}"
+        compose: "{{ item.value.compose }}"
+        stop_containers: "{{ item.value.stop_containers }}"
+        volumes: "{{ item.value.volumes | default([]) }}"
+        backup_location: "{{ backup_root }}/{{ item.key }}"

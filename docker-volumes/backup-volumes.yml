@@ -9,9 +9,14 @@
     - "{{ config_file }}"
 
   tasks:
+    - name: Fail if target_service is not defined in services
+      fail:
+        msg: "Service '{{ target_service }}' not found in config.yml"
+      when: target_service is defined and target_service not in services
+
     - name: Backup volumes for desired services
       include_tasks: "{{ service_task }}"
-      loop: "{{ services | dict2items }}"
+      loop: "{{ services | dict2items if target_service is not defined else services | dict2items | selectattr('key', 'equalto', target_service) }}"
       vars:
         service: "{{ item.key }}"
         compose: "{{ item.value.compose }}"

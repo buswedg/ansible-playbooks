@@ -15,7 +15,7 @@
   become: true
 
 - name: Backup and prune volumes for service ({{ service }})
-  include_tasks: "{{ volume_task }}"
+  include_tasks: "{{ backup.volume_task }}"
   loop: "{{ volumes }}"
   loop_control:
     loop_var: volume

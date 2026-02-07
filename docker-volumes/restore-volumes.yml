@@ -11,7 +11,7 @@
 
   tasks:
     - name: Restore volumes for desired services
-      include_tasks: "tasks/restore-service.yml"
+      include_tasks: "{{ restore.service_task }}"
       loop: "{{ services | dict2items }}"
       vars:
         service: "{{ item.key }}"

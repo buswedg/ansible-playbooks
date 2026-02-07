@@ -10,7 +10,7 @@
 
   tasks:
     - name: Backup volumes for desired services
-      include_tasks: "{{ service_task }}"
+      include_tasks: "{{ backup.service_task }}"
       loop: "{{ services | dict2items }}"
       vars:
         service: "{{ item.key }}"

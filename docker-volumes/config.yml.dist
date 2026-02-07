@@ -1,6 +1,10 @@
 backup_root: "/path/to/backup/location"
-service_task: "{{ playbook_dir }}/tasks/do-service.yml"
-volume_task: "{{ playbook_dir }}/tasks/do-volume.yml"
+backup:
+  service_task: "{{ playbook_dir }}/tasks/backup-service.yml"
+  volume_task: "{{ playbook_dir }}/tasks/backup-volume.yml"
+restore:
+  service_task: "{{ playbook_dir }}/tasks/restore-service.yml"
+  volume_task: "{{ playbook_dir }}/tasks/restore-volume.yml"
 gpg_pass: "{{ playbook_dir }}/.gpg-pass"
 backup_image: "buswedg/alpine-gnupg:latest"
 host_platform: "linux/amd64"

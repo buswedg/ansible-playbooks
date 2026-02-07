@@ -15,7 +15,7 @@
   become: true
 
 - name: Restore volumes for service ({{ service }})
-  include_tasks: "restore-volume.yml"
+  include_tasks: "{{ restore.volume_task }}"
   loop: "{{ volumes }}"
   loop_control:
     loop_var: volume

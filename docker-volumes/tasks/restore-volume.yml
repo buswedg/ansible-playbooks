@@ -27,5 +27,5 @@
       -v "{{ backup_location }}:/backup" \
       -v "{{ gpg_pass }}:/run/secrets/gpg_pass:ro" \
       {{ backup_image }} \
-      sh -c "gpg --batch --yes --passphrase-file /run/secrets/gpg_pass --decrypt /{{ backup_file }} | tar xzf - -C /data"
+      sh -c "gpg --batch --yes --passphrase-file /run/secrets/gpg_pass --decrypt /{{ backup_file }} | tar xzf - --strip-components=1 -C /data"
   when: backup_files.matched > 0

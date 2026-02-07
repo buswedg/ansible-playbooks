@@ -11,7 +11,7 @@
       -v "{{ backup_location }}:/backup" \
       -v "{{ gpg_pass }}:/run/secrets/gpg_pass:ro" \
       {{ backup_image }} \
-      sh -c "tar czf - /data | gpg --batch --yes --passphrase-file /run/secrets/gpg_pass -c -o /backup/{{ volume }}-$(date +%Y-%m-%d-%H-%M).tar.gz.gpg"
+      sh -c "tar -czf - -C / data | gpg --batch --yes --passphrase-file /run/secrets/gpg_pass -c -o /backup/{{ volume }}-$(date +%Y-%m-%d-%H-%M).tar.gz.gpg"
   when: volume_info.exists
 
 - name: Prune old backups of volume ({{ volume }})

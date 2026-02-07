@@ -14,7 +14,7 @@
   set_fact:
     # Sorts by path (filename) which contains YYYY-MM-DD-HH-MM, ensuring correct chronological order
     # regardless of file modification time.
-    backup_file: "backup/{{ backup_files.files | sort(attribute='path') | last | basename }}"
+    backup_file: "backup/{{ (backup_files.files | sort(attribute='path') | last).path | basename }}"
 
 - name: Display backup being restored
   debug:

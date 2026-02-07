@@ -10,7 +10,7 @@
 
   tasks:
     - name: Backup volumes for desired services
-      include_tasks: "{{ backup.service_task }}"
+      include_tasks: "{{ service_task }}"
       loop: "{{ services | dict2items }}"
       vars:
         service: "{{ item.key }}"
@@ -19,3 +19,5 @@
         backups_kept: "{{ item.value.backups_kept }}"
         volumes: "{{ item.value.volumes | default([]) }}"
         backup_location: "{{ backup_root }}/{{ item.key }}"
+        operation_name: "Backup"
+        operation_task: "{{ backup_task }}"

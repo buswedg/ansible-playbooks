@@ -14,8 +14,8 @@
     group: 1000
   become: true
 
-- name: Restore volumes for service ({{ service }})
-  include_tasks: "{{ restore.volume_task }}"
+- name: "{{ operation_name }} volumes for service ({{ service }})"
+  include_tasks: "{{ operation_task }}"
   loop: "{{ volumes }}"
   loop_control:
     loop_var: volume

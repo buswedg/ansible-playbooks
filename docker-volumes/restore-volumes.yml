@@ -11,7 +11,7 @@
 
   tasks:
     - name: Restore volumes for desired services
-      include_tasks: "{{ restore.service_task }}"
+      include_tasks: "{{ service_task }}"
       loop: "{{ services | dict2items }}"
       vars:
         service: "{{ item.key }}"
@@ -19,3 +19,5 @@
         stop_containers: "{{ item.value.stop_containers }}"
         volumes: "{{ item.value.volumes | default([]) }}"
         backup_location: "{{ backup_root }}/{{ item.key }}"
+        operation_name: "Restore"
+        operation_task: "{{ restore_task }}"
